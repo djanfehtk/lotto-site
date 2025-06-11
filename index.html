@@ -24,6 +24,7 @@
       border-radius: 8px;
       cursor: pointer;
       transition: background 0.2s ease;
+      margin: 10px;
     }
     button:hover {
       background-color: #0056b3;
@@ -47,7 +48,19 @@
     .red    { background-color: #e74c3c; }
     .green  { background-color: #2ecc71; }
     .purple { background-color: #9b59b6; }
-
+    #stats {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      max-width: 600px;
+      margin: 40px auto 0;
+    }
+    .stat {
+      background: #f1f1f1;
+      padding: 10px;
+      border-radius: 6px;
+      font-weight: bold;
+    }
     @keyframes dropIn {
       to {
         opacity: 1;
@@ -59,7 +72,10 @@
 <body>
   <h1>🎱 로또 번호 추첨기</h1>
   <button onclick="drawLotto()">추첨하기</button>
+  <button onclick="loadStats()">실제 로또 통계 보기</button>
   <div id="result"></div>
+  <div id="loading"></div>
+  <div id="stats"></div>
 
   <script>
     function getBallColor(num) {
@@ -89,6 +105,41 @@
           container.appendChild(ball);
         }, i * 200);
       });
+    }
+
+    async function loadStats() {
+      document.getElementById('loading').textContent = '로또 데이터 불러오는 중...';
+      const counts = Array(46).fill(0);
+      const latestRound = 1115; // 최신 회차는 수동으로 설정 가능
+
+      for (let i = 1; i <= latestRound; i++) {
+        try {
+          const res = await fetch(`https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=${i}`);
+          const data = await res.json();
+          if (data.returnValue !== 'success') break;
+          for (let j = 1; j <= 6; j++) {
+            const num = data[`drwtNo${j}`];
+            counts[num]++;
+          }
+        } catch (e) {
+          console.error(`회차 ${i} 오류 발생`, e);
+          break;
+        }
+      }
+
+      showStats(counts);
+      document.getElementById('loading').textContent = '';
+    }
+
+    function showStats(counts) {
+      const statsEl = document.getElementById('stats');
+      statsEl.innerHTML = '';
+      for (let i = 1; i <= 45; i++) {
+        const div = document.createElement('div');
+        div.className = 'stat';
+        div.textContent = `${i}번: ${counts[i]}회`;
+        statsEl.appendChild(div);
+      }
     }
   </script>
 </body>
