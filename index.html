@@ -51,24 +51,4 @@
   <button onclick="drawLotto()">추첨하기</button>
   <div id="result"></div>
 
-  <script>
-    function getBallColor(num) {
-      if (num <= 10) return 'yellow';
-      if (num <= 20) return 'blue';
-      if (num <= 30) return 'red';
-      if (num <= 40) return 'green';
-      return 'purple';
-    }
-
-    function drawLotto() {
-      const numbers = new Set();
-      while (numbers.size < 6) {
-        numbers.add(Math.floor(Math.random() * 45) + 1);
-      }
-      const sorted = [...numbers].sort((a, b) => a - b);
-      document.getElementById('result').innerHTML =
-        sorted.map(n => `<div class="ball ${getBallColor(n)}">${n}</div>`).join('');
-    }
-  </script>
-</body>
-</html>
+  <scr
