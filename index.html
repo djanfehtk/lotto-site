@@ -1,20 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-  <title>로또 추첨기</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>로또 번호 추첨기</title>
   <style>
-    body { text-align: center; font-family: sans-serif; }
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f9f9f9;
+      text-align: center;
+      padding: 50px;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 30px;
+    }
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
     .ball {
       display: inline-block;
       width: 50px;
       height: 50px;
       line-height: 50px;
       border-radius: 50%;
-      background: gold;
-      margin: 5px;
+      margin: 10px;
       font-weight: bold;
-      font-size: 20px;
+      font-size: 18px;
+      color: #fff;
     }
+    .yellow { background-color: #f1c40f; }
+    .blue   { background-color: #3498db; }
+    .red    { background-color: #e74c3c; }
+    .green  { background-color: #2ecc71; }
+    .purple { background-color: #9b59b6; }
   </style>
 </head>
 <body>
@@ -23,6 +52,14 @@
   <div id="result"></div>
 
   <script>
+    function getBallColor(num) {
+      if (num <= 10) return 'yellow';
+      if (num <= 20) return 'blue';
+      if (num <= 30) return 'red';
+      if (num <= 40) return 'green';
+      return 'purple';
+    }
+
     function drawLotto() {
       const numbers = new Set();
       while (numbers.size < 6) {
@@ -30,7 +67,7 @@
       }
       const sorted = [...numbers].sort((a, b) => a - b);
       document.getElementById('result').innerHTML =
-        sorted.map(n => `<div class="ball">${n}</div>`).join('');
+        sorted.map(n => `<div class="ball ${getBallColor(n)}">${n}</div>`).join('');
     }
   </script>
 </body>
